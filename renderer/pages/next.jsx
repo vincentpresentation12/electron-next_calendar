@@ -13,7 +13,10 @@ const localizer = momentLocalizer(moment);
 const defaultDate = new Date();
 
 const show ={
-    display: 'block',
+display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center" ,
     border: '1px solid black',
     paddingTop: '30px',
 }
@@ -30,6 +33,7 @@ const buttonStyle = {
     marginLeft: "50%",
     borderRadius: "5px",
 }
+
 
 function Next() {
     const [events, setEvents] = useState([]);
@@ -53,7 +57,7 @@ useEffect(() => {
                 categorie: event.categorie,
                 transparence: event.transparence,
                 location: event.location,
-                status: event.status,
+                statut: event.statut,
                 nbMaj: event.nbMaj,
             }
             mesEvents.push(monEvent);
@@ -75,6 +79,10 @@ useEffect(() => {
             end: res[0].end,
             description: res[0].description,
             categorie: res[0].categorie,
+            location: res[0].location,
+            statut: res[0].statut,
+            nbMaj: res[0].nbMaj,
+            transparence: res[0].transparence,
         }
             setOneEvent(Event)
     }
@@ -95,7 +103,7 @@ const handleSubmit = (e) => {
     let transparence = e.target.transparence.value;
     let nbMaj = e.target.nbMaj.value;
     let id = oneEvent.id;
-    console.log(id, title, new Date(start), new Date(end), description, categorie);
+    console.log(id, title, location, statut, transparence, new Date(start), new Date(end), description, categorie);
     updateUser(id, title, description, categorie,location,statut,transparence,nbMaj, new Date(start), new Date(end)).then(res => {
             console.log(res);
             setModalOpen(false);
@@ -140,7 +148,6 @@ const handleSubmitCreate = (e) => {
     let nbMaj = e.target.nbMaj.value;
     console.log( title, new Date(start), new Date(end), description, categorie);
     addUser( title, description, categorie,location,statut,transparence,nbMaj, new Date(start), new Date(end)).then(res => {
-            console.log(res);
                setModal1Open(false);
 
                 getAll().then(res => {
@@ -222,9 +229,6 @@ const handleDelete = useCallback(e => {
                 />
             <Modal toggle={() => setModalOpen(!modalOpen)} isOpen={modalOpen}>
                 <div className=" modal-header">
-                    <h5 className=" modal-title" id="exampleModalLabel">
-                        {oneEvent.title}
-                    </h5>
                     <button
                         aria-label="Close"
                         className=" close"
@@ -236,11 +240,15 @@ const handleDelete = useCallback(e => {
                     <Button onClick={(e) => handleDelete(e)}>Delete event</Button>
                 </div>
                 <div style={show} >
-                    <text>Titre: {oneEvent.title}</text><br/>
-                    <text>Description: {oneEvent.description}</text><br/>
-                    <text>Categorie: {oneEvent.categorie}</text><br/>
+                    <span>Titre: {oneEvent.title}</span><br/>
+                    <span>Description: {oneEvent.description}</span><br/>
+                    <span>Categorie: {oneEvent.categorie}</span><br/>
+                    <span>Location: {oneEvent.location}</span><br/>
+                    <span>Statut: {oneEvent.statut}</span><br/>
+                    <span>Transparence: {oneEvent.transparence}</span><br/>
+                    <span>Nombre de modification: {oneEvent.nbMaj}</span><br/>
                 </div>
-                <form onSubmit={(e) => handleSubmit(e)} method="post">
+                <form  onSubmit={(e) => handleSubmit(e)} method="post">
                     <label htmlFor="title">Title</label><br/>
                     <input type="text" id="title" name="title"   required /><br/>
                     <label htmlFor="description">Description</label><br/>
